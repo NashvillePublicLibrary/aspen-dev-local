@@ -43,7 +43,7 @@ Edit `.env` and set at minimum:
 | `ASPEN_REPO_PATH`      | Absolute path to your local clone (include `C:\` info on Windows)             |
 | `SITE_NAME`            | Your dev site name (e.g., `dev.localhost`)                                    |
 | `URL`                  | Local hostname where the site will be accessed (e.g., `http://localhost`)     |
-| `TIMEZONE`             | Your timezone (see [PHP Manual](https://www.php.net/manual/en/timezones.php)) |
+| `TZ`                   | Your timezone (see [PHP Manual](https://www.php.net/manual/en/timezones.php)) |
 | `ASPEN_ADMIN_PASSWORD` | Whatever you want to use to sign in as the `aspen_admin` superadmin account   |
 
 Everything else has working defaults.
