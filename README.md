@@ -87,6 +87,8 @@ If you're starting fresh, you need to do four things in the Aspen admin UI:
 
 3. **Enable your ILS Module**. Go to *System Administration → Modules* and make sure your ILS's module is enabled. This step is what actually kicks off background indexing and loading in default Translation Maps.
 
+4. **Run a Full Update**. If your first indexing pass runs without errors to resolve, go to *ILS → Indexing Profiles → Edit → Indexing Settings*, check *Run Full Update*, and save. The next extract will pull all ILS data locally.
+
 The background process manager runs every 5 minutes via cron and will start the indexer automatically.
 
 ## Daily use
