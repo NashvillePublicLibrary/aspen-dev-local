@@ -1,12 +1,41 @@
 # Dockerfile.dev
 # Extends the main Aspen image with dev-only tooling.
-# The base image is built first from the main repo's docker/Dockerfile,
-# then this layer adds xdebug on top.
-# xdebug is installed here but only ACTIVATED when XDEBUG_ENABLE=true in .env
-# (handled by dev-init.sh at container startup).
 
 FROM aspen-dev-local-base
 
+ARG ORACLE_IC_VERSION=23.26.3.0.0
+ARG ORACLE_IC_DIR=instantclient_23_26
+
 RUN apt-get update \
-    && apt-get install -y php8.4-xdebug \
+    && apt-get install -y \
+        php8.4-xdebug \
+        php8.4-dev \
+        php-pear \
+        build-essential \
+        libaio1 \
+        unzip \
+        wget \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Oracle Instant Client Basic + SDK
+RUN mkdir -p /opt/oracle \
+    && cd /tmp \
+    && wget -q \
+        "https://download.oracle.com/otn_software/linux/instantclient/2326000/instantclient-basic-linux.x64-${ORACLE_IC_VERSION}.zip" \
+    && wget -q \
+        "https://download.oracle.com/otn_software/linux/instantclient/2326000/instantclient-sdk-linux.x64-${ORACLE_IC_VERSION}.zip" \
+    && unzip -o "instantclient-basic-linux.x64-${ORACLE_IC_VERSION}.zip" -d /opt/oracle \
+    && unzip -o "instantclient-sdk-linux.x64-${ORACLE_IC_VERSION}.zip" -d /opt/oracle \
+    && rm -f /tmp/instantclient-*.zip
+
+# Make Oracle libraries available to the dynamic linker
+RUN echo "/opt/oracle/${ORACLE_IC_DIR}" \
+        > /etc/ld.so.conf.d/oracle-instantclient.conf \
+    && ldconfig
+
+# Compile and enable PHP OCI8
+RUN printf "instantclient,/opt/oracle/${ORACLE_IC_DIR}\n" \
+        | pecl install oci8 \
+    && echo "extension=oci8.so" \
+        > /etc/php/8.4/mods-available/oci8.ini \
+    && phpenmod oci8
