@@ -13,6 +13,7 @@ Place this repo next to your cloned Aspen Discovery repo. For example:
 
 ```
 aspen-discovery/         ← your fork/clone
+aspen-discovery-plugins/ ← optional plugin repo
 aspen-dev-local/         ← this repo
 ├── .env.example
 ├── .env                 ← your copy (git-ignored)
