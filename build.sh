@@ -3,6 +3,10 @@
 
 set -e
 
+# Ensure optional Aspen Discovery Plugins mount fallback exists.
+# If the directory already exists, mkdir -p leaves it unchanged.
+mkdir -p aspen-discovery-plugins
+
 echo "Building base Aspen image (this takes a few minutes)..."
 docker compose build base
 
